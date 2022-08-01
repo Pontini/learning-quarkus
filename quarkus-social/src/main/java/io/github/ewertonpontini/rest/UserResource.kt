@@ -1,10 +1,8 @@
 package io.github.ewertonpontini.rest
 
+import io.github.ewertonpontini.rest.domain.UserRepository
 import io.github.ewertonpontini.rest.domain.User
 import io.github.ewertonpontini.rest.dto.CreateUserRequest
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase
-import io.quarkus.hibernate.orm.panache.PanacheQuery
-import io.quarkus.logging.Log
 import javax.transaction.Transactional
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
@@ -22,15 +20,12 @@ class UserResource {
         user.name = data.name
         user.age = data.age
         user.persist()
-
         return Response.ok(data).build()
     }
 
     @GET
     fun getListUsers(): Response {
-
-        Log.debug("Eai como vai"+query.count())
-
-        return Response.ok("30").build()
+        val result = UserRepository().getAll()?.list<User>()
+        return Response.ok(result).build()
     }
 }
